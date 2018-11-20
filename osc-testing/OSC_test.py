@@ -11,7 +11,7 @@ osc_startup()
 osc_udp_client("localhost", 9001, "pd_comms")
 
 # Build a simple message and send it.
-msg = oscbuildparse.OSCMessage("/test/me", ",iii", [100, 672, 8])
+msg = oscbuildparse.OSCMessage("/test/me", None, [10, 5, 8])
 osc_send(msg, "pd_comms")
 
 # Build a message with autodetection of data types, and send it.
@@ -38,7 +38,9 @@ def handlerfunction(s, x, y):
     #print(text)
 
 # Make server channels to receive packets.
-osc_udp_server("localhost", 9001, "pd_comms")
+osc_udp_server("localhost", 9001, "pd_receive")
+
+
 
 # Associate Python functions with message address patterns, using default
 # argument scheme OSCARG_DATAUNPACK.
@@ -52,10 +54,9 @@ while not finished:
     #
     osc_method("/test/*", handlerfunction)
     osc_process()
-    osc_process()
-    osc_process()
     #
     finished = True
 
 # Properly close the system.
 osc_terminate()
+print('osc_done')

@@ -1,30 +1,61 @@
 #This code will test the OSC communication in python using the pyOSC library
 
-import OSC
+# Import needed modules from osc4py3
+from osc4py3.as_eventloop import *
+from osc4py3 import oscbuildparse
 
-#Note: there is an open socket with these attributes on my computer RIP
-#[57120].socket.close()
-#'127.0.0.1'
-client = OSC.OSCClient()
-client.connect(('localhost', 9001) )
+# Start the system.
+osc_startup()
 
-client.send(OSC.OSCMessage('/user/1', [1.0, 2.0, 3.0 ]))
+# Make client channels to send packets.
+osc_udp_client("localhost", 9001, "pd_comms")
 
+# Build a simple message and send it.
+msg = oscbuildparse.OSCMessage("/test/me", ",iii", [100, 672, 8])
+osc_send(msg, "pd_comms")
 
-def OSC_handler(addr, tags, data, client_address):
-    text = "OSCMessage '%s' from %s: " % (addr, client_address)
-    text += str(data)
+# Build a message with autodetection of data types, and send it.
+#msg = oscbuildparse.OSCMessage("/test/me", None, ["text", 672, 8.871])
+#osc_send(msg, "pd_comms")
+
+# Buils a complete bundle, and postpone its executions by 10 sec.
+#exectime = time.time() + 10   # execute in 10 seconds
+#msg1 = oscbuildparse.OSCMessage("/sound/levels", None, [1, 5, 3])
+#msg2 = oscbuildparse.OSCMessage("/sound/bits", None, [32])
+#msg3 = oscbuildparse.OSCMessage("/sound/freq", None, [42000])
+#bun = oscbuildparse.OSCBundle(oscbuildparse.unixtime2timetag(exectime),
+#                    [msg1, msg2, msg3])
+#osc_send(bun, "pd_comms")
+
+def handlerfunction(s, x, y):
+    # Will receive message data unpacked in s, x, y
+    text = "OSC message received: %s, %s, %s" % (str(s), str(x), str(y))
     print(text)
 
-if __name__ == '__main__':
-    s = OSC.OSCServer(('localhost', 9001))  # listen on localhost, port 57120
-    s.addMsgHandler('/user/1', OSC_handler)     # call handler() for OSC messages received with the /startup address
+#def handlerfunction2(address, s, x, y):
+    # Will receive message address, and message data flattened in s, x, y
+    #text = "OSC message received: %s, %s, %s" % (s, x, y)
+    #print(text)
 
-print('did it work yet')
+# Make server channels to receive packets.
+osc_udp_server("localhost", 9001, "pd_comms")
 
+# Associate Python functions with message address patterns, using default
+# argument scheme OSCARG_DATAUNPACK.
+# Too, but request the message address pattern before in argscheme
+#osc_method("/test/*", handlerfunction2, argscheme=osm.OSCARG_ADDRESS + osm.OSCARG_DATAUNPACK)
 
-#client.send( OSCMessage("/user/2", [2.0, 3.0, 4.0 ] ) )
-#client.send( OSCMessage("/user/3", [2.0, 3.0, 3.1 ] ) )
-#client.send( OSCMessage("/user/4", [3.2, 3.4, 6.0 ] ) )
+# Periodically call osc4py3 processing method in your event loop.
+finished = False
+while not finished:
+    # You can send OSC messages from your event loop too
+    #
+    osc_method("/test/*", handlerfunction)
+    osc_process()
+    osc_process()
+    osc_process()
+    #
+    finished = True
 
-#client.send( OSCMessage("/quit") )
+# Properly close the system.
+osc_terminate()

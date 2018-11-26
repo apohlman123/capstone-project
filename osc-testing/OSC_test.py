@@ -11,7 +11,7 @@ osc_startup()
 osc_udp_client("localhost", 9001, "pd_comms")
 
 # Build a simple message and send it.
-msg = oscbuildparse.OSCMessage("/test/me", None, [10, 5, 8])
+msg = oscbuildparse.OSCMessage("/test/me", None, [10])
 osc_send(msg, "pd_comms")
 
 # Build a message with autodetection of data types, and send it.

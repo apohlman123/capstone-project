@@ -10,10 +10,12 @@ A3 = 5 #chosen GPIO pin number
 A2 = 6 #chosen GPIO pin number
 A1 = 16 #chosen GPIO pin number
 A0 = 26 #chosen GPIO pin number
+BStart = 17
 GPIO.setup(A3,GPIO.OUT)
 GPIO.setup(A2,GPIO.OUT)
 GPIO.setup(A1,GPIO.OUT)
 GPIO.setup(A0,GPIO.OUT)
+GPIO.setup(BStart,GPIO.IN)
 
 #Initialize Variables
 #OSC_sequence = 0                #updated by PureData as sequence runs
@@ -24,6 +26,13 @@ chosen_BPM = 60
 BPM_secs = float(chosen_BPM)/60  #converts BPM to per second, rounds to whole
 BPM_delay = 1/BPM_secs         #converts to time delay in seconds
 
+#Wait for Start button press interrupt
+Start = GPIO.wait_for_edge(BStart, Rising, timeout = 5000)
+
+if Start != True :
+    print("Timed out waiting for start")
+else :
+    print("Starting Sequencer!")
 
 #0
 GPIO.output(A3,False) ; GPIO.output(A2,False) ; GPIO.output(A1,False) ; GPIO.output(A0,False)

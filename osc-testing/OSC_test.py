@@ -11,7 +11,7 @@ osc_startup()
 osc_udp_client("localhost", 9001, "pd_comms")
 
 # Build a simple message and send it.
-msg = oscbuildparse.OSCMessage("/test/me", None, [10])
+msg = oscbuildparse.OSCMessage("/test/me", ",iii", [10, 12 ,13])
 osc_send(msg, "pd_comms")
 
 # Build a message with autodetection of data types, and send it.
@@ -27,9 +27,9 @@ osc_send(msg, "pd_comms")
 #                    [msg1, msg2, msg3])
 #osc_send(bun, "pd_comms")
 
-def handlerfunction(s, x, y):
+def handlerfunction(z, x, y):
     # Will receive message data unpacked in s, x, y
-    text = "OSC message received: %s, %s, %s" % (str(s), str(x), str(y))
+    text = "OSC message received: %s, %s, %s" % (str(z), str(x), str(y))
     print(text)
 
 #def handlerfunction2(address, s, x, y):

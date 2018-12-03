@@ -1,0 +1,17 @@
+#N canvas 679 160 450 300 10;
+#X obj 11 86 unpackOSC;
+#X obj 11 212 print;
+#X obj 11 182 unpack f;
+#X obj 11 54 udpreceive localhost 9001;
+#X text 135 122 look only for /test address;
+#X text 139 182 unpack data as a single float;
+#X text 140 87 unpack osc message for pure data;
+#X text 201 54 listen to localhost ip \, port 9001;
+#X text 140 155 look only for /me subaddress;
+#X obj 11 121 routeOSC /test;
+#X obj 11 153 routeOSC /me;
+#X connect 0 0 9 0;
+#X connect 2 0 1 0;
+#X connect 3 0 0 0;
+#X connect 9 0 10 0;
+#X connect 10 0 2 0;

@@ -1,0 +1,9 @@
+#N canvas 2 265 501 584 10;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-S1_R 8932 float 2;
+#X coords 0 1 8932 -1 200 140 1 0 0;
+#X restore 119 305 graph;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array \$0-S1_L 8932 float 2;
+#X coords 0 1 8932 -1 200 140 1 0 0;
+#X restore 119 142 graph;

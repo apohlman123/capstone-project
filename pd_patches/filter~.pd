@@ -1,0 +1,93 @@
+#N canvas 817 23 862 945 10;
+#X floatatom 569 252 0 0 0 0 - - -;
+#X floatatom 658 316 0 0 0 0 - - -;
+#X obj 451 183 vradio 15 1 1 4 empty empty empty 0 -8 0 10 -228856
+-1 -1 0.628346;
+#X text 401 182 lowpass;
+#X text 395 198 highpass;
+#X text 395 213 bandpass;
+#X text 413 228 notch;
+#X obj 451 379 + 1;
+#X obj 451 406 cyclone/selector~ 4 1;
+#X obj 451 429 outlet~ audio_out;
+#X obj 481 144 inlet~ audio;
+#X obj 111 169 hsl 128 15 0 3.99 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X text 106 134 Filter Type;
+#X obj 112 237 hsl 128 15 20 20000 1 0 empty empty empty -2 -8 0 10
+-262144 -1 -1 0 1;
+#X text 107 201 Cutoff Frequency;
+#X obj 112 303 hsl 128 15 0 1 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X text 107 268 Resonance;
+#X text 585 407 Selects between 4 types of filters;
+#X obj 481 379 cyclone/svf~ 800 0.01 <linear>;
+#X floatatom 144 416 5 0 0 0 - - -;
+#X obj 144 463 sel 1 2 3 4;
+#X obj 144 393 int;
+#X obj 144 439 change;
+#X msg 131 511 Highpass;
+#X msg 191 511 Bandpass;
+#X msg 251 511 Notch;
+#X obj 141 484 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 158 484 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 176 484 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 193 484 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 77 511 Lowpass;
+#X obj 260 104 symbol;
+#X symbolatom 108 150 10 0 0 0 - - -;
+#X text 187 438 Only output when change occurs;
+#X text 187 391 Round to int;
+#X text 187 413 Visual rounding;
+#X text 222 463 Select between which message;
+#X text 293 511 Possible messages;
+#X floatatom 109 218 7 0 0 0 - - -;
+#X floatatom 109 284 7 0 0 0 - - -;
+#X obj 268 204 r \$0-cutoff;
+#X obj 268 270 r \$0-resonance;
+#X obj 664 335 s \$0-resonance;
+#X obj 575 271 s \$0-cutoff;
+#X obj 260 78 r \$0-filtertype;
+#X obj 77 550 s \$0-filtertype;
+#X obj 664 153 inlet cutoff;
+#X connect 0 0 18 1;
+#X connect 0 0 43 0;
+#X connect 1 0 18 2;
+#X connect 1 0 42 0;
+#X connect 2 0 7 0;
+#X connect 7 0 8 0;
+#X connect 7 0 21 0;
+#X connect 8 0 9 0;
+#X connect 10 0 18 0;
+#X connect 11 0 2 0;
+#X connect 13 0 0 0;
+#X connect 15 0 1 0;
+#X connect 18 0 8 1;
+#X connect 18 1 8 2;
+#X connect 18 2 8 3;
+#X connect 18 3 8 4;
+#X connect 19 0 22 0;
+#X connect 20 0 26 0;
+#X connect 20 1 27 0;
+#X connect 20 2 28 0;
+#X connect 20 3 29 0;
+#X connect 21 0 19 0;
+#X connect 22 0 20 0;
+#X connect 23 0 45 0;
+#X connect 24 0 45 0;
+#X connect 25 0 45 0;
+#X connect 26 0 30 0;
+#X connect 27 0 23 0;
+#X connect 28 0 24 0;
+#X connect 29 0 25 0;
+#X connect 30 0 45 0;
+#X connect 31 0 32 0;
+#X connect 40 0 38 0;
+#X connect 41 0 39 0;
+#X connect 44 0 31 0;
+#X connect 46 0 13 0;
+#X coords 0 -1 1 1 150 250 1 100 100;

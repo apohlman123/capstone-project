@@ -1,0 +1,123 @@
+#N canvas 660 59 1019 911 10;
+#X obj 649 216 vd~ delsig;
+#X obj 648 170 pack f 50;
+#X obj 648 192 line~;
+#X obj 242 192 r~ \$0-feedback;
+#X obj 668 240 r \$0-feedback-send;
+#X obj 668 261 pack f 50;
+#X obj 668 283 line~;
+#X obj 649 312 *~;
+#X obj 697 327 s~ \$0-feedback;
+#X obj 648 128 r \$0-delaytime-send;
+#X obj 648 150 * 2000;
+#X obj 295 437 vsl 15 127 0 1 0 0 \$0-feedback-send \$0-feedback-recv
+empty 0 -9 0 10 -262144 -86853 -86853 6300 1;
+#X obj 243 438 vsl 15 127 0 1 0 0 \$0-delaytime-send \$0-delaytime-recv
+empty 0 -9 0 10 -262144 -86853 -86853 6300 1;
+#X obj 243 311 loadbang;
+#X obj 712 25 adc~;
+#X msg 243 362 0.5;
+#N canvas 0 50 450 250 (subpatch) 0;
+#X array output 441 float 3;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0;
+#X coords 0 1 441 -1 200 140 1;
+#X restore 807 329 graph;
+#X obj 697 350 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 697 372 metro 100;
+#X obj 697 394 tabwrite~ output;
+#X text 294 419 FB;
+#X text 236 419 TIME;
+#X obj 157 112 inlet~ Delay_L;
+#X obj 181 132 inlet~ Delay_R;
+#X floatatom 243 571 5 0 0 0 - - -, f 5;
+#X floatatom 295 571 5 0 0 0 - - -, f 5;
+#X text 837 589 Low-pass filter;
+#X obj 661 799 dac~;
+#X obj 347 437 vsl 15 127 20 20000 1 0 empty empty empty 0 -9 0 10
+-262144 -86853 -86853 12600 1;
+#X floatatom 347 571 5 0 0 0 - - -, f 5;
+#X text 346 419 LP;
+#X text 837 621 High-pass filter;
+#X obj 399 437 vsl 15 127 20 20000 1 0 empty empty empty 0 -9 0 10
+-262144 -86853 -86853 0 1;
+#X floatatom 399 571 5 0 0 0 - - -, f 5;
+#X text 398 419 HP;
+#X msg 280 362 20000;
+#X msg 328 362 20;
+#X obj 709 663 *~;
+#X obj 445 437 vsl 15 127 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 12600 1;
+#X floatatom 445 571 5 0 0 0 - - -, f 5;
+#X text 437 420 LEVEL;
+#X msg 364 362 1;
+#X obj 497 437 vsl 15 127 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 497 571 5 0 0 0 - - -, f 5;
+#X text 479 420 RVB SEND;
+#X obj 725 707 s~ Delay_Reverb_Send;
+#X obj 725 688 *~;
+#X msg 398 362 0;
+#X obj 243 333 t b b b b b b;
+#X obj 157 219 delwrite~ delsig 2000;
+#X obj 650 589 svf~ 800 0.01 <linear>;
+#X obj 650 621 svf~ 800 0.01 <linear>;
+#X connect 0 0 7 0;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X connect 3 0 49 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 6 0 7 1;
+#X connect 7 0 8 0;
+#X connect 7 0 19 0;
+#X connect 7 0 50 0;
+#X connect 9 0 10 0;
+#X connect 10 0 1 0;
+#X connect 11 0 25 0;
+#X connect 12 0 24 0;
+#X connect 13 0 48 0;
+#X connect 15 0 12 0;
+#X connect 15 0 11 0;
+#X connect 17 0 18 0;
+#X connect 18 0 19 0;
+#X connect 22 0 49 0;
+#X connect 23 0 49 0;
+#X connect 28 0 29 0;
+#X connect 28 0 50 1;
+#X connect 32 0 33 0;
+#X connect 32 0 51 1;
+#X connect 35 0 28 0;
+#X connect 36 0 32 0;
+#X connect 37 0 27 0;
+#X connect 37 0 27 1;
+#X connect 38 0 39 0;
+#X connect 38 0 37 1;
+#X connect 41 0 38 0;
+#X connect 42 0 43 0;
+#X connect 42 0 46 0;
+#X connect 46 0 45 0;
+#X connect 47 0 42 0;
+#X connect 48 0 15 0;
+#X connect 48 1 17 0;
+#X connect 48 2 35 0;
+#X connect 48 3 36 0;
+#X connect 48 4 41 0;
+#X connect 48 5 47 0;
+#X connect 50 0 51 0;
+#X connect 51 1 37 0;
+#X connect 51 1 46 1;
+#X coords 0 -1 1 1 350 200 1 200 400;

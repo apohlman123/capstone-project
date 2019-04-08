@@ -1,0 +1,24 @@
+#N canvas 867 111 616 475 10;
+#X obj 244 101 hsl 128 15 0 1 0 1 empty empty 'roomsize' 20 8 0 10
+-262144 -260097 -1 1700 0;
+#X obj 267 152 hsl 128 15 0 2.4 0 1 empty empty damp 20 8 0 10 -262144
+-260097 -1 2700 0;
+#X floatatom 250 122 5 0 0 0 - - -;
+#X floatatom 273 172 5 0 0 0 - - -;
+#X obj 195 294 chair.vfreeverb~;
+#X obj 195 322 dac~;
+#X obj 195 252 receive~ Reverb_L_Send;
+#X obj 218 271 receive~ Reverb_R_Send;
+#X msg 289 222 1;
+#X obj 289 200 loadbang;
+#X text 346 198 Default to 100% wet;
+#X connect 0 0 2 0;
+#X connect 0 0 4 2;
+#X connect 1 0 3 0;
+#X connect 1 0 4 3;
+#X connect 4 0 5 0;
+#X connect 4 1 5 1;
+#X connect 6 0 4 0;
+#X connect 7 0 4 1;
+#X connect 8 0 4 4;
+#X connect 9 0 8 0;

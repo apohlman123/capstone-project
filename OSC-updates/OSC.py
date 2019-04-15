@@ -14,7 +14,7 @@ OpenSoundControl
 ===============================================================================
 
 OpenSoundControl is a network-protocol for sending (small) packets of addressed
-data over network sockets. This OSC-implementation supports the classical 
+data over network sockets. This OSC-implementation supports the classical
 UDP/IP protocol for sending and receiving packets but provides as well support
 for TCP/IP streaming, whereas the message size is prepended as int32 (big
 endian) before each message/packet.
@@ -31,13 +31,13 @@ OSC-packets come in two kinds:
 	- OSC-bundles are a special type of OSC-message containing only
 	OSC-messages as 'payload'. Recursively. (meaning; an OSC-bundle could
 	contain other OSC-bundles, containing OSC-bundles etc.)
-	
+
 OSC-bundles start with the special keyword '#bundle' and do not have an
 OSC-address (but the OSC-messages a bundle contains will have OSC-addresses!).
 Also, an OSC-bundle can have a timetag, essentially telling the receiving
 server to 'hold' the bundle until the specified time. The OSCBundle class
 allows easy cration & manipulation of OSC-bundles.
-	
+
 For further information see also http://opensoundcontrol.org/spec-1_0
 
 -------------------------------------------------------------------------------
@@ -89,14 +89,14 @@ v0.3.0	- 27 Dec. 2007
 	Started out to extend the 'SimpleOSC' implementation (v0.2.3) by Daniel Holth & Clinton McChesney.
 	Rewrote OSCMessage
 	Added OSCBundle
-	
+
 v0.3.1	- 3 Jan. 2008
 	Added OSClient
-	Added OSCRequestHandler, loosely based on the original CallbackManager 
+	Added OSCRequestHandler, loosely based on the original CallbackManager
 	Added OSCServer
 	Removed original CallbackManager
 	Adapted testing-script (the 'if __name__ == "__main__":' block at the end) to use new Server & Client
-	
+
 v0.3.2	- 5 Jan. 2008
 	Added 'container-type emulation' methods (getitem(), setitem(), __iter__() & friends) to OSCMessage
 	Added ThreadingOSCServer & ForkingOSCServer
@@ -107,7 +107,7 @@ v0.3.2	- 5 Jan. 2008
 v0.3.3	- 9 Jan. 2008
 	Added OSC-timetag support to OSCBundle & OSCRequestHandler
 	Added ThreadingOSCRequestHandler
-	
+
 v0.3.4	- 13 Jan. 2008
 	Added message-filtering to OSCMultiClient
 	Added subscription-handler to OSCServer
@@ -135,12 +135,12 @@ Original Comments
 -----------------
 > Open SoundControl for Python
 > Copyright (C) 2002 Daniel Holth, Clinton McChesney
-> 
+>
 > This library is free software; you can redistribute it and/or modify it under
 > the terms of the GNU Lesser General Public License as published by the Free
 > Software Foundation; either version 2.1 of the License, or (at your option) any
 > later version.
-> 
+>
 > This library is distributed in the hope that it will be useful, but WITHOUT ANY
 > WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 > PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
@@ -782,7 +782,7 @@ def OSCString(next):
     #print(str(next))
     #print(len(next))
 	return struct.pack(">%ds" % (OSCstringLength), bytes(str(next), 'utf-8'))
-        
+
 
 def OSCBlob(next):
 	"""Convert a string into an OSC Blob.
@@ -791,7 +791,7 @@ def OSCBlob(next):
 	The blob ends with 0 to 3 zero-bytes ('\x00')
 	"""
 
-	if type(next) in types.StringTypes:
+	if type(next) == type("hi"):
 		OSCblobLength = math.ceil((len(next)) / 4.0) * 4
 		binary = struct.pack(">i%ds" % (OSCblobLength), OSCblobLength, next)
 	else:
@@ -2511,21 +2511,21 @@ class NotSubscribedError(OSCClientError):
 
 ######
 #
-# OSC over streaming transport layers (usually TCP) 
+# OSC over streaming transport layers (usually TCP)
 #
 # Note from the OSC 1.0 specifications about streaming protocols:
-# 
+#
 # The underlying network that delivers an OSC packet is responsible for
 # delivering both the contents and the size to the OSC application. An OSC
 # packet can be naturally represented by a datagram by a network protocol such
 # as UDP. In a stream-based protocol such as TCP, the stream should begin with
 # an int32 giving the size of the first packet, followed by the contents of the
 # first packet, followed by the size of the second packet, etc.
-# 
+#
 # The contents of an OSC packet must be either an OSC Message or an OSC Bundle.
 # The first byte of the packet's contents unambiguously distinguishes between
 # these two alternatives.
-# 
+#
 ######
 
 class OSCStreamRequestHandler(StreamRequestHandler, OSCAddressSpace):
@@ -2796,7 +2796,7 @@ class OSCStreamingServerThreading(ThreadingMixIn, OSCStreamingServer):
 	pass
 	""" Implements a server which spawns a separate thread for each incoming
 	connection. Care must be taken since the OSC address space is for all
-	the same. 
+	the same.
 	"""
 
 class OSCStreamingClient(OSCAddressSpace):

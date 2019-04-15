@@ -6,6 +6,9 @@ import time
 import RPi.GPIO as GPIO
 import socket
 import threading
+import board
+import busio
+import adafruit_mpr121
 
 # Variables keep track of I/O pins
 Sq3 = 26
@@ -20,6 +23,7 @@ Bt2 = 12
 Bt1 = 7
 Bt0 = 8
 Bt_int = 9 #Was 20
+Touch_int = 4
 
 # Set BCM I/O
 GPIO.setmode(GPIO.BCM)
@@ -35,6 +39,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 #Moved here to avoid "client not defined" errors
 client = OSC.OSCClient()
@@ -115,6 +120,16 @@ def sequence_button(channel):
     else :
         print("No button input detected")
 
+def touchpad_pressed(channel):
+    #Create a multi-message OSC bundle
+    #The OSC messages addresses correspond to which of the touchpads are pressed
+    print("Interrupt recieved on I/O {}" .format(channel))
+    touchpads = OSC.OSCBundle("/test", time=0)
+    for i in range(12):
+        if mpr121[i].value:
+            touchpads.append(OSC.OSCMessage("/T{}" .format(i)))
+    client.send(touchpads)
+
 def OSCreceive_handler(addr, tags, data, source):
     #print("Received from: {}, " .format(OSC.getUrlStr(source)))
     #print("Address: {}, " .format(addr))
@@ -161,12 +176,18 @@ GPIO.add_event_detect(Bt_int, GPIO.FALLING, callback=sequence_button, bouncetime
 GPIO.add_event_detect(BPlay, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BStop, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BReset, GPIO.RISING, callback=sequence_control)
+GPIO.add_event_detect(Touch_int, GPIO.RISING, callback=touchpad_pressed, bouncetime=75)
 
 # Init OSC server for receive
 server = OSC.OSCServer(('localhost', 9002))
 server.addMsgHandler("/test", OSCreceive_handler)
 server_thread = threading.Thread(target=server.serve_forever)
 server_thread.start()
+
+# Init i2c comms for touchpads
+i2c = busio.I2C(board.SCL, board.SDA)
+mpr121 = adafruit_mpr121.MPR121(i2c)
+touched = mpr121.touched_pins #returns 12-member tuple of current pin state
 
 input("Enter any key to establish Pure Data OSC connection: ")
 #try:

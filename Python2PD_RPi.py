@@ -39,7 +39,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Moved here to avoid "client not defined" errors
 client = OSC.OSCClient()

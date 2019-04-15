@@ -39,7 +39,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Touch_int, GPIO.IN)
 
 #Moved here to avoid "client not defined" errors
 client = OSC.OSCClient()
@@ -176,7 +176,7 @@ GPIO.add_event_detect(Bt_int, GPIO.FALLING, callback=sequence_button, bouncetime
 GPIO.add_event_detect(BPlay, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BStop, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BReset, GPIO.RISING, callback=sequence_control)
-GPIO.add_event_detect(Touch_int, GPIO.RISING, callback=touchpad_pressed, bouncetime=75)
+GPIO.add_event_detect(Touch_int, GPIO.FALLING, callback=touchpad_pressed, bouncetime=75)
 
 # Init OSC server for receive
 server = OSC.OSCServer(('localhost', 9002))

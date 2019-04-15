@@ -47,6 +47,11 @@ client = OSC.OSCClient()
 
 client.connect(('localhost', 9001))
 
+# Init i2c comms for touchpads
+i2c = busio.I2C(board.SCL, board.SDA)
+mpr121 = adafruit_mpr121.MPR121(i2c)
+touched = mpr121.touched_pins #returns 12-member tuple of current pin state
+
 # Define functions
 def sequence_control(channel):
     if channel==BPlay:
@@ -183,11 +188,6 @@ server = OSC.OSCServer(('localhost', 9002))
 server.addMsgHandler("/test", OSCreceive_handler)
 server_thread = threading.Thread(target=server.serve_forever)
 server_thread.start()
-
-# Init i2c comms for touchpads
-i2c = busio.I2C(board.SCL, board.SDA)
-mpr121 = adafruit_mpr121.MPR121(i2c)
-touched = mpr121.touched_pins #returns 12-member tuple of current pin state
 
 input("Enter any key to establish Pure Data OSC connection: ")
 #try:

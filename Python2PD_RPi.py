@@ -138,7 +138,7 @@ def touchpad_pressed(channel):
     for i in range(12):
         if mpr121[i].value:
             client.send(OSC.OSCMessage("/T{}" .format(i)))
-    print("touchpad send took {} time to run", .format(time.time()-start_time))
+    print("touchpad send took {} time to run" .format(time.time()-start_time))
 
 def OSCreceive_handler(addr, tags, data, source):
     #print("Received from: {}, " .format(OSC.getUrlStr(source)))

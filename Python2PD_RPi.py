@@ -129,11 +129,16 @@ def touchpad_pressed(channel):
     #Create a multi-message OSC bundle
     #The OSC messages addresses correspond to which of the touchpads are pressed
     print("Interrupt recieved on I/O {}" .format(channel))
-    touchpads = OSC.OSCBundle("/test", time=0)
+    #touchpads = OSC.OSCBundle("/test", time=0)
+    #for i in range(12):
+    #    if mpr121[i].value:
+    #        touchpads.append(OSC.OSCMessage("/T{}" .format(i)))
+    #client.send(touchpads)
+    start_time = time.time()
     for i in range(12):
         if mpr121[i].value:
-            touchpads.append(OSC.OSCMessage("/T{}" .format(i)))
-    client.send(touchpads)
+            client.send(OSC.OSCMessage("/T{}" .format(i)))
+    print("touchpad send took {} time to run", .format(time.time()-start_time))
 
 def OSCreceive_handler(addr, tags, data, source):
     #print("Received from: {}, " .format(OSC.getUrlStr(source)))

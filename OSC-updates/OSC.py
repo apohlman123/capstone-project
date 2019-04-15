@@ -722,7 +722,7 @@ class OSCBundle(OSCMessage):
 		"""
 		binary = OSCString("#bundle")
 		binary += OSCTimeTag(self.timetag)
-		binary += OSCString(self.message)
+		binary += OSCBlob(self.message)
 
 		return binary
 
@@ -791,9 +791,9 @@ def OSCBlob(next):
 	The blob ends with 0 to 3 zero-bytes ('\x00')
 	"""
 
-	if type(next) == type("hi"):
-		OSCblobLength = math.ceil((len(next)) / 4.0) * 4.0
-		binary = struct.pack(">i%ds" % (OSCblobLength), OSCblobLength, next)
+	if type(next) == str:
+		OSCblobLength = int(math.ceil((len(next)) / 4.0) * 4.0)
+		binary = struct.pack(">i%ds" % (OSCblobLength), OSCblobLength, bytes(str(next), 'utf-8'))
 	else:
 		binary = ""
 

@@ -39,7 +39,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+#GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Moved here to avoid "client not defined" errors
 client = OSC.OSCClient()
@@ -197,12 +197,12 @@ server_thread = threading.Thread(target=server.serve_forever)
 server_thread.start()
 
 input("Enter any key to establish Pure Data OSC connection: ")
-#try:
-client.send(OSC.OSCMessage("/connect"))
-print("Connection established!")
-client.send(OSC.OSCMessage("/play"))
-#except:
- #   print("Could not establish connection")
+try:
+    client.send(OSC.OSCMessage("/connect"))
+    print("Connection established!")
+    client.send(OSC.OSCMessage("/play"))
+except:
+    print("Could not establish connection")
 beentouched = [0] * 12
 try:
     while True:

@@ -39,7 +39,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(Touch_int, GPIO.IN)
+GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Moved here to avoid "client not defined" errors
 client = OSC.OSCClient()
@@ -134,11 +134,11 @@ def touchpad_pressed(channel):
     #    if mpr121[i].value:
     #        touchpads.append(OSC.OSCMessage("/T{}" .format(i)))
     #client.send(touchpads)
-    start_time = time.time()
+    #start_time = time.time()
     for i in range(12):
         if mpr121[i].value:
             client.send(OSC.OSCMessage("/T{}" .format(i)))
-    print("touchpad send took {} time to run" .format(time.time()-start_time))
+    #print("touchpad send took {} time to run" .format(time.time()-start_time))
 
 def OSCreceive_handler(addr, tags, data, source):
     #print("Received from: {}, " .format(OSC.getUrlStr(source)))
@@ -186,7 +186,8 @@ GPIO.add_event_detect(Bt_int, GPIO.FALLING, callback=sequence_button, bouncetime
 GPIO.add_event_detect(BPlay, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BStop, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BReset, GPIO.RISING, callback=sequence_control)
-GPIO.add_event_detect(Touch_int, GPIO.FALLING, callback=touchpad_pressed, bouncetime=75)
+    #Unused callback function... Touchpads detected through polling instead
+#GPIO.add_event_detect(Touch_int, GPIO.FALLING, callback=touchpad_pressed)
 
 # Init OSC server for receive
 server = OSC.OSCServer(('localhost', 9002))
@@ -201,9 +202,17 @@ print("Connection established!")
 client.send(OSC.OSCMessage("/play"))
 #except:
  #   print("Could not establish connection")
+beentouched = [0] * 12
 try:
     while True:
-	    time.sleep(5)
+        for i in range(12):
+            if beentouched[i] != 1:
+                if mpr121[i].value:
+                    client.send(OSC.OSCMessage("/T{}" .format(i)))
+                    beentouched[i] = 1
+                    print("touchpad pressed!")
+            if mpr121[i].value == False:
+                    beentouched[i] = 0
 except KeyboardInterrupt:
     print("Shutting down OSC Server")
     server.close()

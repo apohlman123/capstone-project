@@ -1,4 +1,4 @@
-#N canvas 290 106 1330 894 10;
+#N canvas 565 96 1330 894 10;
 #X obj 341 208 tgl 15 0 empty empty empty 17 7 0 10 -258113 -1 -1 0
 1;
 #X obj 358 208 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
@@ -32,7 +32,7 @@
 #X obj 596 208 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X obj 340 188 hradio 17 1 0 16 empty empty empty 0 -8 0 10 -262144
--1 -1 7;
+-1 -1 14;
 #X obj 54 171 SequencerControl ~;
 #X obj 136 78 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
@@ -75,21 +75,26 @@
 #X obj 410 299 udpsend;
 #X msg 410 240 send /test \$1;
 #X obj 410 264 packOSC;
-#X obj 410 324 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 410 324 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X msg 516 262 connect localhost 9002;
 #X obj 54 17 unpackOSC;
 #X obj 54 39 routeOSC /play /stop /reset;
 #X obj 216 722 adsr~;
 #X obj 516 240 routeOSC /connect /disconnect;
-#X obj 868 383 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 670 395 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 910 384 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 699 413 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
-#X obj 873 331 routeOSC /T1 /T2 /T3 /T4;
-#X obj 958 390 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 760 402 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 999 397 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 801 409 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 676 342 routeOSC /T0 /T1 /T2 /T3 /T4 /T5 /T6 /T7 /T8 /T9 /T10
+/T11;
+#X obj 861 414 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 911 416 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
 #X connect 0 0 24 1;
 #X connect 1 0 24 2;
@@ -185,7 +190,7 @@
 #X connect 48 15 15 0;
 #X connect 49 0 48 0;
 #X connect 49 0 60 0;
-#X connect 49 0 63 0;
+#X connect 49 0 65 0;
 #X connect 50 0 49 0;
 #X connect 50 0 57 0;
 #X connect 51 0 52 0;
@@ -201,8 +206,10 @@
 #X connect 59 0 31 1;
 #X connect 60 0 56 0;
 #X connect 60 1 51 0;
-#X connect 63 0 61 0;
-#X connect 63 1 62 0;
-#X connect 63 2 64 0;
-#X connect 63 3 65 0;
+#X connect 65 0 61 0;
+#X connect 65 1 62 0;
+#X connect 65 2 63 0;
+#X connect 65 3 64 0;
+#X connect 65 4 66 0;
+#X connect 65 5 67 0;
 #X coords 0 0 1 1 85 60 0;

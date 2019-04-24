@@ -23,6 +23,7 @@ Bt2 = 12
 Bt1 = 7
 Bt0 = 8
 Bt_int = 9 #Was 20
+Bt_shift = 22
 #Touch_int = 4
 
 # Set BCM I/O
@@ -39,6 +40,7 @@ GPIO.setup(Bt2,GPIO.IN)
 GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(Bt_shift,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 #GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Moved here to avoid "client not defined" errors
@@ -208,11 +210,15 @@ try:
     while True:
         for i in range(12):
             if beentouched[i] != 1:
-                if mpr121[i].value:
+                if mpr121[i].value and not(GPIO.input(Bt_shift)):
+                    #Bt_shift is active low
+                    client.send(OSC.OSCMessage("/Shift", i))
+                    beentouched[i] = 1
+                    print("shift to sequencer line {}" .format(i))
+                elif mpr121[i].value:
                     client.send(OSC.OSCMessage("/T{}" .format(i)))
                     beentouched[i] = 1
                     print("touchpad {} pressed!" .format(i))
-                    print("OSC Message send with address: /T{}" .format(i))
             if mpr121[i].value == False:
                     beentouched[i] = 0
 except KeyboardInterrupt:

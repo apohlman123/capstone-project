@@ -776,11 +776,10 @@ def OSCString(next):
 	The length of the resulting string is always a multiple of 4 bytes.
 	The string ends with 1 to 4 zero-bytes ('\x00')
 	"""
-
-    OSCstringLength = math.ceil((len(next)+1) / 4.0) * 4.0
-    #print(OSCstringLength)
-    #print(str(next))
-    #print(len(next))
+	OSCstringLength = math.ceil((len(next)+1) / 4.0) * 4.0
+        #print(OSCstringLength)
+        #print(str(next))
+        #print(len(next))
 	return struct.pack(">%ds" % (OSCstringLength), bytes(str(next), 'utf-8'))
 
 

@@ -344,7 +344,7 @@ class OSCMessage(object):
 		'argument' may also be a list or tuple, in which case its elements
 		will get appended one-by-one, all using the provided typehint
 		"""
-		if type(argument) == types.DictType:
+		if type(argument) == dict:
 			argument = argument.items()
 		elif isinstance(argument, OSCMessage):
 			raise TypeError("Can only append 'OSCMessage' to 'OSCBundle'")

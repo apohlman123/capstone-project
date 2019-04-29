@@ -70,60 +70,60 @@ def sequence_button(channel):
     a2 = GPIO.input(Bt2)
     a1 = GPIO.input(Bt1)
     a0 = GPIO.input(Bt0)
-    print(a3)
-    print(a2)
-    print(a1)
-    print(a0)
-    print("Interrupt recieved on I/O {}" .format(channel))
+    #print(a3)
+    #print(a2)
+    #print(a1)
+    #print(a0)
+    #print("Interrupt recieved on I/O {}" .format(channel))
     #Cascaded encoder setup is active high
     if a3==False and a2==False and a1==False and a0==False:
         client.send(OSC.OSCMessage("/B0"))
-        print("trigger 0")
+        #print("trigger 0")
     elif a3==False and a2==False and a1==False and a0==True:
         client.send(OSC.OSCMessage("/B1"))
-        print("trigger 1")
+        #print("trigger 1")
     elif a3==False and a2==False and a1==True and a0==False:
         client.send(OSC.OSCMessage("/B2"))
-        print("trigger 2")
+        #print("trigger 2")
     elif a3==False and a2==False and a1==True and a0==True:
         client.send(OSC.OSCMessage("/B3"))
-        print("trigger 3")
+        #print("trigger 3")
     elif a3==False and a2==True and a1==False and a0==False:
         client.send(OSC.OSCMessage("/B4"))
-        print("trigger 4")
+        #print("trigger 4")
     elif a3==False and a2==True and a1==False and a0==True:
         client.send(OSC.OSCMessage("/B5"))
-        print("trigger 5")
+        #print("trigger 5")
     elif a3==False and a2==True and a1==True and a0==False:
         client.send(OSC.OSCMessage("/B6"))
-        print("trigger 6")
+        #print("trigger 6")
     elif a3==False and a2==True and a1==True and a0==True:
         client.send(OSC.OSCMessage("/B7"))
-        print("trigger 7")
+        #print("trigger 7")
     elif a3==True and a2==False and a1==False and a0==False:
         client.send(OSC.OSCMessage("/B8"))
-        print("trigger 8")
+        #print("trigger 8")
     elif a3==True and a2==False and a1==False and a0==True:
         client.send(OSC.OSCMessage("/B9"))
-        print("trigger 9")
+        #print("trigger 9")
     elif a3==True and a2==False and a1==True and a0==False:
         client.send(OSC.OSCMessage("/B10"))
-        print("trigger 10")
+        #print("trigger 10")
     elif a3==True and a2==False and a1==True and a0==True:
         client.send(OSC.OSCMessage("/B11"))
-        print("trigger 11")
+        #print("trigger 11")
     elif a3==True and a2==True and a1==False and a0==False:
         client.send(OSC.OSCMessage("/B12"))
-        print("trigger 12")
+        #print("trigger 12")
     elif a3==True and a2==True and a1==False and a0==True:
         client.send(OSC.OSCMessage("/B13"))
-        print("trigger 13")
+        #print("trigger 13")
     elif a3==True and a2==True and a1==True and a0==False:
         client.send(OSC.OSCMessage("/B14"))
-        print("trigger 14")
+        #print("trigger 14")
     elif a3==True and a2==True and a1==True and a0==True:
         client.send(OSC.OSCMessage("/B15"))
-        print("trigger 15")
+        #print("trigger 15")
     else :
         print("No button input detected")
 
@@ -182,7 +182,7 @@ def OSCreceive_handler(addr, tags, data, source):
         GPIO.output(Sq3,True) ; GPIO.output(Sq2,True) ; GPIO.output(Sq1,True) ; GPIO.output(Sq0,True)
     else :
         print("Sequence out of range")
-    print("Position in sequence: {}" .format(data))
+    #print("Position in sequence: {}" .format(data))
 
 # Interrupt detection
 GPIO.add_event_detect(Bt_int, GPIO.FALLING, callback=sequence_button, bouncetime=200)
@@ -212,13 +212,14 @@ try:
             if beentouched[i] != 1:
                 if mpr121[i].value and not(GPIO.input(Bt_shift)):
                     #Bt_shift is active low
-                    client.send(OSC.OSCMessage("/Shift", i))
+                    client.send(OSC.OSCMessage("/S{}" .format(i)))
+                    #client.send(OSC.OSCMessage("/Shift", i))
                     beentouched[i] = 1
-                    print("shift to sequencer line {}" .format(i))
+                    #print("shift to sequencer line {}" .format(i))
                 elif mpr121[i].value:
                     client.send(OSC.OSCMessage("/T{}" .format(i)))
                     beentouched[i] = 1
-                    print("touchpad {} pressed!" .format(i))
+                    #print("touchpad {} pressed!" .format(i))
             if mpr121[i].value == False:
                     beentouched[i] = 0
 except KeyboardInterrupt:

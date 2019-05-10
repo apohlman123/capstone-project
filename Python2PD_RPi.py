@@ -1,5 +1,24 @@
-#Script to handle sequencer trigger input Button->Python->PD
+#############################################################################################################
+#Company:      Loyola Marymount University
+#Engineer:     Austin Pohlman
 #
+#Last Edit: 9May2019
+#Design Name:  Python2PD_RPi.py
+#Project Name: Audio Production Instrument (API)
+#Tool Versions: Python 3
+#
+#Description:
+#    Python layer for hardware interfacing and communication with Pure Data patches
+#    Designed for use with the Raspberry Pi 3B+ processor board
+#
+#Dependencies:
+#    "pyOSC" python module (See OSC-updates for updated module with Python3 compatibility)
+#    "RPi.GPIO" python module (Python 2 or 3)
+#    "adafruit_mpr121" python module (Python 3 only)
+#    "time", "socket", "threading", "board", "busio" preinstalled python modules (Python 2 or 3)
+#Revisions:
+#    See github for full revision history
+#############################################################################################################
 
 import OSC
 import time
@@ -10,7 +29,7 @@ import board
 import busio
 import adafruit_mpr121
 
-# Variables keep track of I/O pins
+# Variables keep track of I/O pins (Note that I/0 Pin 20 is not functional on the Pi)
 Sq3 = 26
 Sq2 = 13
 Sq1 = 6
@@ -24,9 +43,8 @@ Bt1 = 7
 Bt0 = 8
 Bt_int = 9 #Was 20
 Bt_shift = 22
-#Touch_int = 4
 
-# Set BCM I/O
+# Set BCM I/O (Numbered based on the Pi's Broadcom chip not the header)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(Sq3,GPIO.OUT)
 GPIO.setup(Sq2,GPIO.OUT)
@@ -41,12 +59,10 @@ GPIO.setup(Bt1,GPIO.IN)
 GPIO.setup(Bt0,GPIO.IN)
 GPIO.setup(Bt_int,GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(Bt_shift,GPIO.IN, pull_up_down=GPIO.PUD_UP)
-#GPIO.setup(Touch_int, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 #Moved here to avoid "client not defined" errors
+# Init OSC client for send, connect to virtual port on the Pi
 client = OSC.OSCClient()
-# Init OSC client for send
-
 client.connect(('localhost', 9001))
 
 # Init i2c comms for touchpads
@@ -56,6 +72,7 @@ touched = mpr121.touched_pins #returns 12-member tuple of current pin state
 
 # Define functions
 def sequence_control(channel):
+    #Callback function for Play Stop Reset control buttons
     if channel==BPlay:
         client.send(OSC.OSCMessage("/play"))
     elif channel==BStop:
@@ -66,6 +83,7 @@ def sequence_control(channel):
         print("No control input detected")
 
 def sequence_button(channel):
+    #Callback function to recieve sequencer button input
     a3 = GPIO.input(Bt3)
     a2 = GPIO.input(Bt2)
     a1 = GPIO.input(Bt1)
@@ -144,6 +162,7 @@ def sequence_button(channel):
     #print("touchpad send took {} time to run" .format(time.time()-start_time))
 
 def OSCreceive_handler(addr, tags, data, source):
+    #Callback function to output sequence data to LEDs
     #print("Received from: {}, " .format(OSC.getUrlStr(source)))
     #print("Address: {}, " .format(addr))
     #print("Tags: {}, " .format(tags))
@@ -189,7 +208,7 @@ GPIO.add_event_detect(Bt_int, GPIO.FALLING, callback=sequence_button, bouncetime
 GPIO.add_event_detect(BPlay, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BStop, GPIO.RISING, callback=sequence_control)
 GPIO.add_event_detect(BReset, GPIO.RISING, callback=sequence_control)
-    #Unused callback function... Touchpads detected through polling instead
+#Unused callback function... Touchpads detected through polling instead
 #GPIO.add_event_detect(Touch_int, GPIO.FALLING, callback=touchpad_pressed)
 
 # Init OSC server for receive
@@ -199,12 +218,19 @@ server_thread = threading.Thread(target=server.serve_forever)
 server_thread.start()
 
 input("Enter any key to establish Pure Data OSC connection: ")
+#Use python exceptions to attempt to establish OSC connection and start sequencer
 try:
     client.send(OSC.OSCMessage("/connect"))
     print("Connection established!")
     client.send(OSC.OSCMessage("/play"))
 except:
     print("Could not establish connection")
+
+#The following for loop polls the touchpad chip and loops through the 12 touchpads...
+#...if one is pressed while the shift button is low, set the flag high and send a...
+#...message. If one is pressed alone, set the flag high and send a different message...
+#...otherwise, the flag is cleared; this prevents multiple triggers when a pad is pressed
+#Flag vector, each element is a flag relating to the corresponding touchpad
 beentouched = [0] * 12
 try:
     while True:
@@ -213,7 +239,6 @@ try:
                 if mpr121[i].value and not(GPIO.input(Bt_shift)):
                     #Bt_shift is active low
                     client.send(OSC.OSCMessage("/S{}" .format(i)))
-                    #client.send(OSC.OSCMessage("/Shift", i))
                     beentouched[i] = 1
                     #print("shift to sequencer line {}" .format(i))
                 elif mpr121[i].value:
@@ -222,6 +247,7 @@ try:
                     #print("touchpad {} pressed!" .format(i))
             if mpr121[i].value == False:
                     beentouched[i] = 0
+#While loop is interrupted by ctrl+C, safely shuts down OSC server and disables I/O
 except KeyboardInterrupt:
     print("Shutting down OSC Server")
     server.close()

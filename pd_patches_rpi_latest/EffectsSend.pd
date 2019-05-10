@@ -1,0 +1,32 @@
+#N canvas 262 66 666 560 10;
+#X obj 195 319 *~;
+#X floatatom 208 136 17 0 0 0 - - -;
+#X obj 204 340 *~;
+#X obj 23 304 inlet~ \$0-Reverb_Send_L_In;
+#X obj 27 325 inlet~ \$0-Reverb_Send_R_In;
+#X obj 474 318 *~;
+#X floatatom 208 185 17 0 0 0 - - -;
+#X obj 483 339 *~;
+#X obj 211 118 hsl 100 15 0 1 0 0 empty empty Reverb -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 211 167 hsl 100 15 0 1 0 0 empty empty Delay -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 195 483 outlet~ \$0-Reverb_Send_L_Out;
+#X obj 204 462 outlet~ \$0-Reverb_Send_R_Out;
+#X obj 474 482 outlet~ \$0-Delay_Send_L_Out;
+#X obj 483 461 outlet~ \$0-Delay_Send_R_Out;
+#X connect 0 0 10 0;
+#X connect 2 0 11 0;
+#X connect 3 0 0 0;
+#X connect 3 0 5 0;
+#X connect 4 0 2 0;
+#X connect 4 0 7 0;
+#X connect 5 0 12 0;
+#X connect 7 0 13 0;
+#X connect 8 0 1 0;
+#X connect 8 0 2 1;
+#X connect 8 0 0 1;
+#X connect 9 0 6 0;
+#X connect 9 0 5 1;
+#X connect 9 0 7 1;
+#X coords 0 -1 1 1 125 110 2 200 100;

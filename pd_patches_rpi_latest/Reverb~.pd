@@ -1,0 +1,52 @@
+#N canvas 564 77 1127 842 10;
+#X obj 6 122 inlet~ Reverb_L;
+#X obj 30 142 inlet~ Reverb_R;
+#X obj 504 446 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 12700 1;
+#X floatatom 504 579 5 0 0 0 - - -, f 5;
+#X text 496 429 LEVEL;
+#X obj 420 446 vsl 15 128 0 1 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 420 579 5 0 0 0 - - -, f 5;
+#X text 412 429 SIZE;
+#X obj 462 446 vsl 15 128 0 2.4 0 0 empty empty empty 0 -9 0 10 -262144
+-1 -1 0 1;
+#X floatatom 462 579 5 0 0 0 - - -, f 5;
+#X text 456 429 DAMP;
+#X obj 504 349 loadbang;
+#X msg 504 370 1;
+#X text 534 369 Init. to Level at Max;
+#X obj 4 654 dac~;
+#X obj 4 606 *~;
+#X obj 29 606 *~;
+#X obj 6 209 +~;
+#X obj 30 229 +~;
+#X obj 88 257 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 93 184 r~ Delay_Reverb_Send;
+#X obj 4 577 freeverb~;
+#X msg 142 536 roomsize \$1;
+#X msg 142 557 damping \$1;
+#X connect 0 0 17 0;
+#X connect 1 0 18 0;
+#X connect 2 0 3 0;
+#X connect 2 0 15 1;
+#X connect 2 0 16 1;
+#X connect 5 0 6 0;
+#X connect 5 0 22 0;
+#X connect 8 0 9 0;
+#X connect 8 0 23 0;
+#X connect 11 0 12 0;
+#X connect 12 0 2 0;
+#X connect 15 0 14 0;
+#X connect 16 0 14 1;
+#X connect 17 0 21 0;
+#X connect 18 0 21 1;
+#X connect 20 0 17 1;
+#X connect 20 0 18 1;
+#X connect 20 0 19 0;
+#X connect 21 0 15 0;
+#X connect 21 1 16 0;
+#X connect 22 0 21 0;
+#X connect 23 0 21 0;
+#X coords 0 -1 1 1 150 200 1 400 400;

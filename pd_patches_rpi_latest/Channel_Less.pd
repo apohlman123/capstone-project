@@ -1,0 +1,22 @@
+#N canvas 335 107 1094 832 10;
+#X obj 59 214 SamplerPhasor;
+#X obj 64 484 dac~;
+#X obj 59 196 inlet \$0-Trigger;
+#X obj 63 353 hsl 120 15 0 1 0 0 empty empty Level -2 -8 0 10 -262144
+-1 -1 11900 1;
+#X obj 61 263 SampleNaming;
+#X obj 235 318 loadbang;
+#X msg 235 337 1;
+#X obj 65 419 *~;
+#X obj 149 437 *~;
+#X connect 0 0 7 0;
+#X connect 0 1 8 0;
+#X connect 2 0 0 0;
+#X connect 3 0 8 1;
+#X connect 3 0 7 1;
+#X connect 4 0 0 1;
+#X connect 5 0 6 0;
+#X connect 6 0 3 0;
+#X connect 7 0 1 0;
+#X connect 8 0 1 1;
+#X coords 0 -1 1 1 135 125 2 55 250;
